@@ -3,8 +3,8 @@ import java_cup.runtime.*;
 import java.io.Reader;
 
 
-%%
 //---- [2] SEGUNDA SECCION 'Opciones y declaraciones'----
+%%
 %class Lexer //nombre de la clase a generar
 %unicode //soporte con caracteres unicode
 %line //usar un contador de linea que se esta analizando (variable yyline)
@@ -25,12 +25,12 @@ espacio     = {final_linea} | [ \t\f]
 num			= 0|[1-9][0-9]*
 id 			= [A-Za-z_][A-Za-z_0-9]*
 oprel       = "<"|">"|"="
-comilla		= "\""
+//comilla		= "\""
 %%
 // ---- [3] TERCERA SECCION 'Reglas Lexicas' ----
 
 <YYINITIAL>{
-	//simbolos de terminales
+	//simbolos de terminales y variables
 	"="				   	{return symbol(sym.IGUAL); 							}
 	"+"                	{return symbol(sym.MAS);   							}
     "-"                	{return symbol(sym.MENOS); 							}
@@ -45,7 +45,7 @@ comilla		= "\""
     "entonces"			{return symbol(sym.ENTONCES);						}
     {oprel}				{return symbol(sym.OPREL);							}
 //   {enter}				{return symbol(sym.ENTER);							}
-    {comilla}			{return symbol(sym.COMILLA);						}
+//    {comilla}			{return symbol(sym.COMILLA);						}
     {espacio}          	{/* NO HACER NADA*/									}
     {num}				{return symbol(sym.CONST, new Integer(yytext()));	}
     {id}                {return symbol(sym.ID, new Integer(1));          	}
