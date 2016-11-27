@@ -13,10 +13,11 @@ import java_cup.runtime.*;
 
 //print de ejemplo
 %{
-	public static imprime(){
+	public static void imprime(){
 		System.out.println("Hola");
 	}
 %}
 
 %%
 // ---- TERCERA SECCION 'Reglas Lexicas' ----
+<YYINITIAL>"inicio" {System.out.println("Palabra Inicio");}
