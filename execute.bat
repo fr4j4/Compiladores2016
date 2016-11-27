@@ -2,5 +2,6 @@
 ::Compiladores 2016 - fgonzlez,  ahidalgo, robulloa.
 @echo off
 cd src
-java  -Xmx128m  Test
+echo "Ejecutando ..."
+java -cp ..\lib\java-cup-11b.jar;..\lib\jflex-1.6.1.jar;. Test
 cd ..
