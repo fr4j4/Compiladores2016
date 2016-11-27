@@ -1,10 +1,10 @@
-//---- PRIMERA SECCION 'Usercode' ----
+//---- [1] PRIMERA SECCION 'Usercode' ----
 import java_cup.runtime.*;
-//import java.io.Reader;
+import java.io.Reader;
 
 
 %%
-//---- SEGUNDA SECCION 'Opciones y declaraciones'----
+//---- [2] SEGUNDA SECCION 'Opciones y declaraciones'----
 %class Lexer //nombre de la clase a generar
 %unicode //soporte con caracteres unicode
 %line //usar un contador de linea que se esta analizando (variable yyline)
@@ -19,5 +19,5 @@ import java_cup.runtime.*;
 %}
 
 %%
-// ---- TERCERA SECCION 'Reglas Lexicas' ----
+// ---- [3] TERCERA SECCION 'Reglas Lexicas' ----
 <YYINITIAL>"inicio" {System.out.println("Palabra Inicio");}
