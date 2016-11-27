@@ -11,11 +11,21 @@ import java.io.Reader;
 %column //usar un contador de columna que se este analizando (yycolumn)
 %cup // integrar CUP
 
-//print de ejemplo
-%{
-	public static void imprime(){
-		System.out.println("Hola");
-	}
+//codigo se uduario
+
+%{   
+    /* To create a new java_cup.runtime.Symbol with information about
+       the current token, the token will have no value in this
+       case. */
+    private Symbol symbol(int type) {
+        return new Symbol(type, yyline, yycolumn);
+    }
+    
+    /* Also creates a new java_cup.runtime.Symbol with information
+       about the current token, but this object has a value. */
+    private Symbol symbol(int type, Object value) {
+        return new Symbol(type, yyline, yycolumn, value);
+    }
 %}
 
 //MACROS (definiciones de final de linea, espacio en blanco, numeros, id, etc)
