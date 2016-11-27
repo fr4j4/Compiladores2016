@@ -34,7 +34,7 @@ final_linea = \r|\n|\r\n
 espacio     = {final_linea} | [ \t\f]
 num			= 0|[1-9][0-9]*
 id 			= [A-Za-z_][A-Za-z_0-9]*
-oprel       = "<"|">"|"="
+//oprel       = "<"|">"|"="
 //comilla		= "\""
 %%
 // ---- [3] TERCERA SECCION 'Reglas Lexicas' ----
@@ -53,8 +53,10 @@ oprel       = "<"|">"|"="
     "fin"				{return symbol(sym.FIN);							}
     "si"				{return symbol(sym.SI);								}
     "entonces"			{return symbol(sym.ENTONCES);						}
-    {oprel}				{return symbol(sym.OPREL);							}
-//   {enter}				{return symbol(sym.ENTER);							}
+    //{oprel}			{return symbol(sym.OPREL);							}
+	"<"				   	{return symbol(sym.MENOR); 							}
+	">"                	{return symbol(sym.MAYOR);   						}
+//   {enter}				{return symbol(sym.ENTER);						}
 //    {comilla}			{return symbol(sym.COMILLA);						}
     {espacio}          	{/* NO HACER NADA*/									}
     {num}				{return symbol(sym.CONST, new Integer(yytext()));	}

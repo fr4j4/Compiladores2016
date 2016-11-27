@@ -1,7 +1,7 @@
 //-------- [1] PRIMERA SECCION 'Declaraciones preliminares'
 import java_cup.runtime.*;
 //-------- [2] SEGUNDA SECCION 'Declaracion de terminales y no-terminales'
-terminal          IGUAL, MENOS, MAS, DIV, POR, LPAREN, RPAREN,CONST,ID,INICIO,FIN,SI,ENTONCES,OPREL,LEER;
+terminal          IGUAL, MENOS, MAS, DIV, POR, LPAREN, RPAREN,CONST,ID,INICIO,FIN,SI,ENTONCES,LEER, MENOR, MAYOR, ESCRIBIR;
 non terminal      S,
                   inst_1,
                   inst_2,
@@ -32,18 +32,19 @@ inst_2    ::=   inst_leer
               | inst_escribir           
               | inst_si           
               | inst_asig;
-inst_si   ::=   SI cond ENTONCES inst_1;
-inst_leer ::=   LEER LPAREN ID RPAREN texto ;
+inst_si   ::=   SI cond ENTONCES inst_2;
+inst_leer ::=   LEER LPAREN ID RPAREN;
+inst_escribir ::= ESCRIBIR LPAREN ID RPAREN 
+			| ESCRIBIR LPAREN texto RPAREN;
 inst_asig ::=   ID IGUAL exp;
-texto     ::=   ID                            
-              | CONST;
+
 exp       ::=   exp MAS exp                   
-              | exp MENOS exp           
-              | exp POR exp       
+              | exp POR exp           
+              | exp MENOS exp       
               | exp DIV exp
               | ID                          
               | CONST;
-cond      ::=   exp OPREL exp;
+cond      ::=   exp MENOR exp | exp MAYOR exp | exp IGUAL exp;
 
 
 
