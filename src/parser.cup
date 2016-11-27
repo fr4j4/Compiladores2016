@@ -1,16 +1,28 @@
 //-------- [1] PRIMERA SECCION 'Declaraciones preliminares'
 import java_cup.runtime.*;
 //-------- [2] SEGUNDA SECCION 'Declaracion de terminales y no-terminales'
-terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, LPAREN, RPAREN;
-terminal Integer   NUMBER, ID;
-non terminal Object     expr_list, expr_part;
-non terminal Integer    expr, factor, term;
+terminal          IGUAL, MENOS, MAS, DIV, POR, LPAREN, RPAREN,CONST,ID,INICIO,FIN,SI,ENTONCES,OPREL;
+non terminal      S,
+                  inst_1,
+                  inst_2,
+                  inst_leer,
+                  inst_escribir,
+                  inst_si,
+                  inst_asig,
+                  texto,
+                  exp,
+                  cond
+                  ;
+
 //-------- [3] TERCERA SECCION 'Precedencia y asociatividad de terminales'
 
-precedence left PLUS, MINUS; 
-precedence left TIMES, DIVIDE; 
+precedence left MAS, MENOS; 
+precedence left POR, DIV; 
 
 //-------- [4] CUARTA SECCION  'Gramatica'
+
+S ::=   inst_1;
+
 /* GRAMATICA DE EJEMPLO
    expr_list ::=   expr_list expr_part
                  | expr_part
@@ -24,7 +36,10 @@ precedence left TIMES, DIVIDE;
    term     ::=    LPAREN expr RPAREN
                  | NUMBER
                  | ID 
-*/
+
+
+  //start with Start;
+  //Start::= expr_list;
    expr_list ::= expr_list expr_part
                  |
                  expr_part;
@@ -63,3 +78,4 @@ precedence left TIMES, DIVIDE;
                  ID:i
                  {: RESULT = i; :}
                  ;
+                 */
