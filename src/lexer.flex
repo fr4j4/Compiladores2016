@@ -49,10 +49,11 @@ id 			= [A-Za-z_][A-Za-z_0-9]*
 	"("                	{return symbol(sym.LPAREN);							}
     ")"                	{return symbol(sym.RPAREN);							}
     "leer"				{return symbol(sym.LEER);							}
-    "inicio"			{return symbol(sym.INICIO);							}
-    "fin"				{return symbol(sym.FIN);							}
-    "si"				{return symbol(sym.SI);								}
-    "entonces"			{return symbol(sym.ENTONCES);						}
+    "escribir"           {return symbol(sym.ESCRIBIR);                       }
+    "inicio"            {return symbol(sym.INICIO);                         }
+    "fin"               {return symbol(sym.FIN);                            }
+    "si"                {return symbol(sym.SI);                             }
+    "entonces"          {return symbol(sym.ENTONCES);                       }
     //{oprel}			{return symbol(sym.OPREL);							}
 	"<"				   	{return symbol(sym.MENOR); 							}
 	">"                	{return symbol(sym.MAYOR);   						}
