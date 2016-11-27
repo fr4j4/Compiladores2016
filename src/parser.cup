@@ -18,6 +18,10 @@ non terminal      S,
 
 precedence left MAS, MENOS; 
 precedence left POR, DIV; 
+precedence left IGUAL,ID;
+precedence left LPAREN,RPAREN;
+precedence left ID,LEER;
+precedence left SI, ENTONCES;
 
 //-------- [4] CUARTA SECCION  'Gramatica'
 

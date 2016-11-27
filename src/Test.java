@@ -1,6 +1,13 @@
 public class Test{
 	public static void main(String[] args) {
-		Lexer l;
-		System.out.println("HelloWorld");
+		try{
+	System.out.println("HelloWorld\nHello Again\nAnd Again");
+	parser p = new parser(new Lexer((System.in)));
+    Object result = p.parse().value;
+
+    } catch (Exception e) {
+
+      e.printStackTrace();
+	}
 	}
 }

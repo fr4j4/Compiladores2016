@@ -2,4 +2,6 @@
 *.java*
 *.class
 
+java_cup/
+resp/
 !Test.java
