@@ -1,17 +1,5 @@
 //-------- [1] PRIMERA SECCION 'Declaraciones preliminares'
 import java_cup.runtime.*;
-action code
-{:
-//Variables que son visibles a todas las acciones semanticas de la produccines.
-	miLista listita = new miLista();
-	Boolean flag = true;
-:}
-
-parser code {:
-	public static void main(String args[]) throws Exception {
-		new parser(new Lexer(System.in)).parse();
-	}
-:}
 //-------- [2] SEGUNDA SECCION 'Declaracion de terminales y no-terminales'
 terminal          IGUAL, MENOS, MAS, DIV, POR, LPAREN, RPAREN,CONST,ID,INICIO,FIN,SI,ENTONCES,LEER, MENOR, MAYOR, ESCRIBIR;
 non terminal      S,
