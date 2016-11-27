@@ -19,6 +19,7 @@ import java.io.Reader;
 %}
 
 //MACROS (definiciones de final de linea, espacio en blanco, numeros, id, etc)
+//enter		= \r|\n
 final_linea = \r|\n|\r\n
 espacio     = {final_linea} | [ \t\f]
 num			= 0|[1-9][0-9]*
@@ -42,6 +43,7 @@ oprel       = "<"|">"|"="
     "si"				{return symbol(sym.SI);								}
     "entonces"			{return symbol(sym.ENTONCES);						}
     {oprel}				{return symbol(sym.OPREL);							}
+//   {enter}				{return symbol(sym.ENTER);							}
     {espacio}          	{/* NO HACER NADA*/									}
     {num}				{return symbol(sym.CONST, new Integer(yytext()));	}
     {id}                {return symbol(sym.ID, new Integer(1));          	}
