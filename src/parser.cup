@@ -1,17 +1,21 @@
-//-------- [1] PRIMERA SECCION 'Declaraciones preliminares'
+-//-------- [1] PRIMERA SECCION 'Declaraciones preliminares'
 import java_cup.runtime.*;
+import java.util.*;
 import org.fusesource.jansi.*;
 import  org.fusesource.jansi.*;
 //import static org.fusesource.jansi.Ansi.Color.*;
 
 
 parser code {:
-
+    Hashtable <String,Integer> intVars;
 
     /* Change the method report_error so it will display the line and
        column of where the error occurred in the input as well as the
        reason for the error which is passed into the method in the
        String 'message'. */
+    public void addIntVar(String varName,int value){
+      System.out.println("agregando variable ["+varName+"="+value+"] a la tabla");
+    }
     public void report_error(String message, Object info) {
    
         /* Create a StringBuilder called 'm' with the string 'Error' in it. */
@@ -64,11 +68,27 @@ parser code {:
 init with {: AnsiConsole.systemInstall(); :};
 
 //-------- [2] SEGUNDA SECCION 'Declaracion de terminales y no-terminales'
-terminal          IGUAL, MENOS, MAS, DIV, POR, LPAREN,RPAREN,
-                  ID,FIN,SI,ENTONCES,LEER, MENOR, 
-                  MAYOR,PCOMA,TEXTO,ENTER;
+terminal  IGUAL;
+terminal  MENOS;
+terminal  MAS;
+terminal  DIV;
+terminal  POR;
+terminal  LPAREN;
+terminal  RPAREN;
+terminal  FIN;
+terminal  SI;
+terminal  ENTONCES;
+terminal  LEER;
+terminal  MENOR; 
+terminal  MAYOR;
+terminal  PCOMA;
+terminal  TEXTO;
+terminal  ENTER;
 
-terminal Integer  CONST,INICIO,ESCRIBIR;
+terminal String   ID;
+terminal Integer  CONST;
+terminal Integer  INICIO;
+terminal Integer  ESCRIBIR;
 
 non terminal      S,
                   inst_1,
@@ -85,14 +105,13 @@ non terminal Integer exp;
 //-------- [3] TERCERA SECCION 'Precedencia y asociatividad de terminales'
 
 precedence left MAS, MENOS; 
-precedence left POR, DIV; 
+precedence left POR, DIV;
 //precedence left IGUAL,ID;
 //precedence left LPAREN,RPAREN;
 //precedence left ID,LEER;
 //precedence left SI, ENTONCES;
 
 //-------- [4] CUARTA SECCION  'Gramatica'
-
 
 //S ::= INICIO S|TEXTO S |FIN ;
 /*
@@ -101,44 +120,29 @@ AnsiConsole.out.println(Ansi.ansi().bold().fg(Ansi.Color.RED).a("Hello").fg(Ansi
 AnsiConsole.out.println(Ansi.ansi().reset());
 */
 //TEST2
-S             ::= INICIO inst_1 ;
-inst_1        ::= inst_leer PCOMA inst_1
-                | inst_escribir PCOMA inst_1 
-                | inst_si  inst_1
-                | inst_asig PCOMA inst_1
-                | {:System.exit(1);:} FIN
-                ;
-
-inst_leer     ::= LEER LPAREN ID RPAREN;
-
-inst_escribir ::= ESCRIBIR LPAREN TEXTO:t 
-                  {:System.out.println( Ansi.ansi().render("@|green \""+t+"\"|@") );:} //texto en verde
-                  RPAREN
-                | ESCRIBIR LPAREN ID:var 
-                {:System.out.println( Ansi.ansi().render("@|cyan "+var+"|@ @|yellow =|@ @|magenta VALUE|@"));:}
-                  RPAREN
-                }
-                ;
-
-inst_si       ::= SI cond ENTONCES inst_1 ;
-
-inst_asig     ::= ID:i IGUAL exp:e 
-              {:System.out.print( Ansi.ansi().render("@|cyan "+i+"|@ @|yellow ->|@"+e));:}
-              ;
-
-exp           ::= exp MAS exp           
-                | exp POR exp           
-                | exp MENOS exp       
-                | exp DIV exp
-                | ID                      
-                | CONST:c{:System.out.println(Ansi.ansi().render("@|magenta "+c+"|@"));:}
-                ;
-
-cond          ::=exp MENOR exp | exp MAYOR exp | exp IGUAL exp
-                ;
 
 
+S               ::= INICIO inst_1 {:System.exit(1);:} FIN | INICIO {:System.exit(1);:} FIN;
 
+inst_1          ::= inst_escribir inst_1
+                    |inst_asig inst_1
+                    ;
+
+inst_escribir   ::= ESCRIBIR LPAREN TEXTO:t RPAREN
+                    {: System.out.println( Ansi.ansi().render("@|green \""+t+"\"|@") );:}
+PCOMA;
+
+inst_asig       ::= ID:var IGUAL exp:e
+                  {:System.out.println(Ansi.ansi().render("@|cyan "+e+"|@ -> @|yellow "+var+"|@"));:}
+PCOMA;
+
+exp       ::=   exp MAS exp                      
+              | exp POR exp           
+              | exp MENOS exp       
+              | exp DIV exp
+              | ID                          
+              | CONST:v{:RESULT=v;:}
+;
 /* GRAMATICA FINAL
 S         ::=   INICIO inst_1 FIN ;
 inst_1    ::=   inst_2
