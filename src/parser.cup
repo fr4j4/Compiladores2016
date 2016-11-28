@@ -80,7 +80,7 @@ non terminal      S,
                   cond
                   ;
 
-non terminal 1 exp;
+non terminal Integer exp;
 
 //-------- [3] TERCERA SECCION 'Precedencia y asociatividad de terminales'
 
@@ -101,15 +101,41 @@ AnsiConsole.out.println(Ansi.ansi().bold().fg(Ansi.Color.RED).a("Hello").fg(Ansi
 AnsiConsole.out.println(Ansi.ansi().reset());
 */
 //TEST2
-S             ::= INICIO inst_1 {:System.exit(1);:} FIN | INICIO {:System.exit(1);:} FIN;
-inst_1        ::= inst_leer inst_1| inst_escribir inst_1;
+S             ::= INICIO inst_1 ;
+inst_1        ::= inst_leer PCOMA inst_1
+                | inst_escribir PCOMA inst_1 
+                | inst_si  inst_1
+                | inst_asig PCOMA inst_1
+                | {:System.exit(1);:} FIN
+                ;
+
 inst_leer     ::= LEER LPAREN ID RPAREN;
+
 inst_escribir ::= ESCRIBIR LPAREN TEXTO:t 
-{:AnsiConsole.out.println(Ansi.ansi().bold().fg(Ansi.Color.GREEN).a(t));//imprime texto en color verde
-  AnsiConsole.out.print(Ansi.ansi().reset()); :} RPAREN;
+                  {:System.out.println( Ansi.ansi().render("@|green \""+t+"\"|@") );:} //texto en verde
+                  RPAREN
+                | ESCRIBIR LPAREN ID:var 
+                {:System.out.println( Ansi.ansi().render("@|cyan "+var+"|@ @|yellow =|@ @|magenta VALUE|@"));:}
+                  RPAREN
+                }
+                ;
 
+inst_si       ::= SI cond ENTONCES inst_1 ;
 
+inst_asig     ::= ID:i IGUAL exp:e 
+              {:System.out.print( Ansi.ansi().render("@|cyan "+i+"|@ @|yellow ->|@"+e));:}
+              ;
 
+exp           ::= exp MAS exp           
+                | exp POR exp           
+                | exp MENOS exp       
+                | exp DIV exp
+                | ID                      
+                | CONST:c{:System.out.println(Ansi.ansi().render("@|magenta "+c+"|@"));:}
+                ;
+
+cond          ::=exp MENOR exp | exp MAYOR exp | exp IGUAL exp
+                ;
 
 
 
