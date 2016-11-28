@@ -4,5 +4,5 @@
 cls
 cd src
 echo "Ejecutando ..."
-java -cp ..\lib\java-cup-11b.jar;..\lib\jflex-1.6.1.jar;. Test
+java -cp ..\lib\jansi.jar;..\lib\java-cup-11b.jar;..\lib\jflex-1.6.1.jar;. Test
 cd ..

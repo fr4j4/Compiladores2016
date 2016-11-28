@@ -4,5 +4,5 @@
 @echo off
 cls
 cd src
-java  -Xmx128m -jar ../lib/java-cup-11b.jar -expect 5 parser.cup
+java  -Xmx128m -jar ../lib/java-cup-11b.jar -expect 5 -nowarn parser.cup
 cd ..

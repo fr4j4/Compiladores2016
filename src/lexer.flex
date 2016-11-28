@@ -9,10 +9,11 @@ import java.io.Reader;
 %line //usar un contador de linea que se esta analizando (variable yyline)
 %column //usar un contador de columna que se este analizando (yycolumn)
 %cup // integrar CUP
-
+%ignorecase //no diferenciar de mayusculas y minusculas
 //codigo se uduario
 
 %{   
+     StringBuffer string = new StringBuffer();
     /* To create a new java_cup.runtime.Symbol with information about
        the current token, the token will have no value in this
        case. */
@@ -29,11 +30,18 @@ import java.io.Reader;
 
 //MACROS (definiciones de final de linea, espacio en blanco, numeros, id, etc)
 //enter		= \r|\n
+LineTerm = \r|\n|\r\n
+espacio = {LineTerm} | [ \t\f]
 final_linea = \r|\n|\r\n
+enter       =\n
 espacio     = {final_linea} | [ \t\f]
 num			= 0|[1-9][0-9]*
-id 			= [A-Za-z_][A-Za-z_0-9]*
-texto       = [A-Za-z_0-9]+
+id 			= [A-Za-z][A-Za-z_0-9]*
+OctDigit          = [0-7]
+StringCharacter = [^\r\n\"\\]
+%state STRING
+
+//texto       = [_][A-Za-z0-9]+[_]
 //oprel       = "<"|">"|"="
 //comilla		= "\""
 %%
@@ -61,9 +69,36 @@ texto       = [A-Za-z_0-9]+
 	">"                	{return symbol(sym.MAYOR);   						}
 //   {enter}				{return symbol(sym.ENTER);						}
 //    {comilla}			{return symbol(sym.COMILLA);						}
+    {enter}             {return symbol(sym.ENTER);                          }
     {espacio}          	{/* NO HACER NADA*/									}
     {num}				{return symbol(sym.CONST, new Integer(yytext()));	}
-    {id}                {return symbol(sym.ID, new Integer(1));          	}
-    {texto}             {return symbol(sym.TEXTO, new String(yytext()));    }
+    {id}                {return symbol(sym.ID, yytext());          	}
+    \"                             {yybegin(STRING); string.setLength(0); }
+    //{texto}             {return symbol(sym.TEXTO, yytext());    }
 }
+
+//cuando se detecte un string hay que jugar con los estados 
+<STRING> {
+  \"                             {yybegin(YYINITIAL); return symbol(sym.TEXTO, string.toString()); }
+  
+  {StringCharacter}+             { string.append( yytext() ); }
+  
+  /* escape sequences */
+  "\\b"                          { string.append( '\b' ); }
+  "\\t"                          { string.append( '\t' ); }
+  "\\n"                          { string.append( '\n' ); }
+  "\\f"                          { string.append( '\f' ); }
+  "\\r"                          { string.append( '\r' ); }
+  "\\\""                         { string.append( '\"' ); }
+  "\\'"                          { string.append( '\'' ); }
+  "\\\\"                         { string.append( '\\' ); }
+  \\[0-3]?{OctDigit}?{OctDigit}  { char val = (char) Integer.parseInt(yytext().substring(1),8);
+                                   string.append( val ); }
+  
+  /* error cases */
+  \\.                            { throw new RuntimeException("Illegal escape sequence \""+yytext()+"\""); }
+  {LineTerm}               { throw new RuntimeException("Unterminated string at end of line"); }
+}
+
+
     [^]                 { throw new Error("Caracter no permitido <"+yytext()+">"); }
