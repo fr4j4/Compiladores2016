@@ -62,9 +62,11 @@ parser code {:
 
 //-------- [2] SEGUNDA SECCION 'Declaracion de terminales y no-terminales'
 terminal          IGUAL, MENOS, MAS, DIV, POR, LPAREN,RPAREN,
-                  CONST,ID,INICIO,FIN,SI,ENTONCES,LEER, MENOR, 
-                  MAYOR, ESCRIBIR,PCOMA;
-terminal String   TEXTO;
+                  ID,INICIO,FIN,SI,ENTONCES,LEER, MENOR, 
+                  MAYOR, ESCRIBIR,PCOMA,TEXTO;
+
+terminal Integer  CONST;
+
 non terminal      S,
                   inst_1,
                   inst_2,
@@ -72,9 +74,10 @@ non terminal      S,
                   inst_escribir,
                   inst_si,
                   inst_asig,
-                  exp,
                   cond
                   ;
+
+non terminal Integer exp;
 
 //-------- [3] TERCERA SECCION 'Precedencia y asociatividad de terminales'
 
@@ -87,7 +90,7 @@ precedence left SI, ENTONCES;
 
 //-------- [4] CUARTA SECCION  'Gramatica'
 
-S         ::=   INICIO inst_1 FIN ;
+S         ::=   INICIO inst_1 PCOMA FIN ;
 inst_1    ::=   inst_2
               | inst_1 inst_2;
 inst_2    ::=   inst_leer                     

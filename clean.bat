@@ -9,4 +9,4 @@ del parser.jav*
 del sym.jav*
 del *.class
 cd ..
-echo "limpieza terminada "
+echo "limpieza terminada"
