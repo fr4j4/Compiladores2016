@@ -17,7 +17,11 @@ parser code {:
     public void pushVar(String varName,int value){
       //System.out.println("agregando variable ["+varName+"="+value+"] a la tabla");
       System.out.println(Ansi.ansi().render("@|cyan "+varName+"|@ = @|yellow "+value+"|@"));
-      intVars.put(varName,value);
+      /*
+      if(intVars.contains(varName)){
+        intVars.remove(varName);
+      }*/
+        intVars.put(varName,value);
     }
 
     public Integer getValue(String id){//obtiene el valor de una variable si es que existe
@@ -159,19 +163,20 @@ inst_asig       ::= ID:var IGUAL exp:e
 PCOMA
 ;
 
-inst_si         ::= SI cond:c ENTONCES inst_1 
-{:
+inst_si         ::= SI cond:c ENTONCES {:
+  System.out.println("------->"+c);
   /*
   if(c){
     System.out.println("JOJOJO");
   }
   */
-:}
+:} inst_1 
+
 ;
 
 cond            ::= exp:e1 MENOR exp:e2 {:RESULT=e1<e2;:}
-                  | exp:e1 MAYOR exp:e2 
-                  | exp:e1 IGUAL exp:e2
+                  | exp:e1 MAYOR exp:e2 {:RESULT=e1>e2;:}
+                  | exp:e1 IGUAL exp:e2 {:RESULT=(e1==e2);:}
 ;
 
 exp             ::=   exp:e1 MAS exp:e2  {:RESULT=(e1+e2);:}
