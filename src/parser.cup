@@ -58,10 +58,13 @@ parser code {:
     }
 :};
 
+
+
 //-------- [2] SEGUNDA SECCION 'Declaracion de terminales y no-terminales'
 terminal          IGUAL, MENOS, MAS, DIV, POR, LPAREN,RPAREN,
                   CONST,ID,INICIO,FIN,SI,ENTONCES,LEER, MENOR, 
-                  MAYOR, ESCRIBIR,TEXTO,PCOMA;
+                  MAYOR, ESCRIBIR,PCOMA;
+terminal String   TEXTO;
 non terminal      S,
                   inst_1,
                   inst_2,
@@ -93,10 +96,10 @@ inst_2    ::=   inst_leer
               | inst_asig;
 inst_si   ::=   SI cond ENTONCES inst_2;
 inst_leer ::=   LEER LPAREN ID RPAREN;
-inst_escribir ::= ESCRIBIR LPAREN ID RPAREN 
-			| ESCRIBIR LPAREN TEXTO RPAREN
+inst_escribir ::= ESCRIBIR LPAREN ID RPAREN
+			| ESCRIBIR LPAREN  TEXTO RPAREN
       ;
-inst_asig ::=   ID IGUAL exp:e;
+inst_asig ::=   ID IGUAL exp;
 
 exp       ::=   exp MAS exp                   
               | exp POR exp           
