@@ -11,7 +11,7 @@ public class Test{
 		    l=new Lexer(new PushbackReader(new InputStreamReader(System.in), 1024));
 		    p=new parser(l);
 		    Object o=p.parse();
-		    System.out.println("FIN");
+		    System.out.println("FIN DEL PROGRAMA");
 	    } catch (Exception e) {
 	      e.printStackTrace();
 		}

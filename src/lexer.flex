@@ -2,7 +2,6 @@
 import java_cup.runtime.*;
 import java.io.Reader;
 
-
 //---- [2] SEGUNDA SECCION 'Opciones y declaraciones'----
 %%
 %class Lexer //nombre de la clase a generar
@@ -41,6 +40,8 @@ id 			= [A-Za-z_][A-Za-z_0-9]*
 
 <YYINITIAL>{
 	//simbolos de terminales y variables
+
+    ";"                 {return symbol(sym.PCOMA);                          }
 	"="				   	{return symbol(sym.IGUAL); 							}
 	"+"                	{return symbol(sym.MAS);   							}
     "-"                	{return symbol(sym.MENOS); 							}
@@ -49,7 +50,7 @@ id 			= [A-Za-z_][A-Za-z_0-9]*
 	"("                	{return symbol(sym.LPAREN);							}
     ")"                	{return symbol(sym.RPAREN);							}
     "leer"				{return symbol(sym.LEER);							}
-    "escribir"           {return symbol(sym.ESCRIBIR);                       }
+    "escribir"          {return symbol(sym.ESCRIBIR);                       }
     "inicio"            {return symbol(sym.INICIO);                         }
     "fin"               {return symbol(sym.FIN);                            }
     "si"                {return symbol(sym.SI);                             }
@@ -62,5 +63,5 @@ id 			= [A-Za-z_][A-Za-z_0-9]*
     {espacio}          	{/* NO HACER NADA*/									}
     {num}				{return symbol(sym.CONST, new Integer(yytext()));	}
     {id}                {return symbol(sym.ID, new Integer(1));          	}
-    [^]                 { throw new Error("Caracter no permitido <"+yytext()+">"); }
 }
+    [^]                 { throw new Error("Caracter no permitido <"+yytext()+">"); }
