@@ -110,17 +110,19 @@ precedence left POR, DIV;
 
 start with S;
 
-S               ::= INICIO inst {::} FIN | INICIO {:System.exit(1);:} FIN;
+S               ::= INICIO inst {::}  FIN | INICIO {:System.exit(1);:} FIN;
 
 inst          ::= inst_escribir inst
                 | inst_asig inst
                 | inst_si inst
                 | inst_leer inst
+                | 
 ;
 
 inst_leer       ::= LEER LPAREN ID:var RPAREN 
                     {:
                         if(execute){
+                            System.out.print(Ansi.ansi().render("@|green ingrese valor para "+var+": |@"));
                             java.util.Scanner s=new java.util.Scanner(System.in);
                             String x=s.next();
                             s.nextLine();
