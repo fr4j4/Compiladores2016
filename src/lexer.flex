@@ -49,40 +49,34 @@ StringCharacter = [^\r\n\"\\]
 
 <YYINITIAL>{
 	//simbolos de terminales y variables
-
-    ";"                 {return symbol(sym.PCOMA);                          }
-	"="				   	{return symbol(sym.IGUAL); 							}
-	"+"                	{return symbol(sym.MAS);   							}
-    "-"                	{return symbol(sym.MENOS); 							}
-	"*"                	{return symbol(sym.POR);   							}
-	"/"                	{return symbol(sym.DIV);   							}
-	"("                	{return symbol(sym.LPAREN);							}
-    ")"                	{return symbol(sym.RPAREN);							}
-    "leer"				{return symbol(sym.LEER);							}
-    "escribir"          {return symbol(sym.ESCRIBIR);                       }
-    "inicio"            {return symbol(sym.INICIO);                         }
-    "fin"               {return symbol(sym.FIN);                            }
-    "si"                {return symbol(sym.SI);                             }
-    "entonces"          {return symbol(sym.ENTONCES);                       }
-    //{oprel}			{return symbol(sym.OPREL);							}
-	"<"				   	{return symbol(sym.MENOR); 							}
-	">"                	{return symbol(sym.MAYOR);   						}
-//   {enter}				{return symbol(sym.ENTER);						}
-//    {comilla}			{return symbol(sym.COMILLA);						}
-    {enter}             {return symbol(sym.ENTER);                          }
-    {espacio}          	{/* NO HACER NADA*/									}
-    {num}				{return symbol(sym.CONST, new Integer(yytext()));	}
-    {id}                {return symbol(sym.ID, yytext());          	}
-    \"                             {yybegin(STRING); string.setLength(0); }
-    //{texto}             {return symbol(sym.TEXTO, yytext());    }
+  ";"                 {return symbol(sym.PCOMA);                        }
+	"="				   	      {return symbol(sym.ASIGN); 							          }
+  "=="                {return symbol(sym.IGUAL);                        }
+	"+"                	{return symbol(sym.MAS);   							          }
+  "-"                	{return symbol(sym.MENOS); 							          }
+	"*"                	{return symbol(sym.POR);   							          }
+	"/"                	{return symbol(sym.DIV);   							          }
+	"("                	{return symbol(sym.LPAREN);							          }
+  ")"                	{return symbol(sym.RPAREN);							          }
+  "leer"				      {return symbol(sym.LEER);							            }
+  "escribir"          {return symbol(sym.ESCRIBIR);                     }
+  "inicio"            {return symbol(sym.INICIO);                       }
+  "fin"               {return symbol(sym.FIN);                          }
+  "si"                {return symbol(sym.SI);                           }
+  "entonces"          {return symbol(sym.ENTONCES);                     }
+	"<"				   	      {return symbol(sym.MENOR); 							          }
+	">"                	{return symbol(sym.MAYOR);   						          }
+  {enter}             {return symbol(sym.ENTER);                        }
+  {espacio}          	{/* NO HACER NADA*/									              }
+  {num}				        {return symbol(sym.CONST, new Integer(yytext()));	}
+  {id}                {return symbol(sym.ID, yytext());          	      }
+  \"                  {yybegin(STRING); string.setLength(0);            }
 }
 
 //cuando se detecte un string hay que jugar con los estados 
 <STRING> {
   \"                             {yybegin(YYINITIAL); return symbol(sym.TEXTO, string.toString()); }
-  
   {StringCharacter}+             { string.append( yytext() ); }
-  
   /* escape sequences */
   "\\b"                          { string.append( '\b' ); }
   "\\t"                          { string.append( '\t' ); }
@@ -94,11 +88,8 @@ StringCharacter = [^\r\n\"\\]
   "\\\\"                         { string.append( '\\' ); }
   \\[0-3]?{OctDigit}?{OctDigit}  { char val = (char) Integer.parseInt(yytext().substring(1),8);
                                    string.append( val ); }
-  
   /* error cases */
   \\.                            { throw new RuntimeException("Illegal escape sequence \""+yytext()+"\""); }
   {LineTerm}               { throw new RuntimeException("Unterminated string at end of line"); }
 }
-
-
-    [^]                 { throw new Error("Caracter no permitido <"+yytext()+">"); }
+[^]                 { throw new Error("Caracter no permitido <"+yytext()+">"); }

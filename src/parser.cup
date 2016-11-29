@@ -1,26 +1,15 @@
 //-------- [1] PRIMERA SECCION 'Declaraciones preliminares'
 import java_cup.runtime.*;
+import java.io.*;
 import java.util.*;
 import org.fusesource.jansi.*;
 import  org.fusesource.jansi.*;
-//import static org.fusesource.jansi.Ansi.Color.*;
-
 
 parser code {:
     Hashtable <String,Integer> intVars;
-
-    /* Change the method report_error so it will display the line and
-       column of where the error occurred in the input as well as the
-       reason for the error which is passed into the method in the
-       String 'message'. */
-
+    boolean execute=true;
     public void pushVar(String varName,int value){
-      //System.out.println("agregando variable ["+varName+"="+value+"] a la tabla");
       System.out.println(Ansi.ansi().render("@|cyan "+varName+"|@ = @|yellow "+value+"|@"));
-      /*
-      if(intVars.contains(varName)){
-        intVars.remove(varName);
-      }*/
         intVars.put(varName,value);
     }
 
@@ -67,149 +56,108 @@ parser code {:
         System.err.println(m);
     }
    
-    /* Change the method report_fatal_error so when it reports a fatal
-       error it will display the line and column number of where the
-       fatal error occurred in the input as well as the reason for the
-       fatal error which is passed into the method in the object
-       'message' and then exit.*/
     public void report_fatal_error(String message, Object info) {
         report_error(message, info);
         System.exit(1);
     }
-
 :};
 
 
-init with 
-{:
-  AnsiConsole.systemInstall();
-  intVars=new Hashtable<String,Integer>(); 
+init with {:
+    AnsiConsole.systemInstall();
+    intVars=new Hashtable<String,Integer>(); 
 :};//codigo que se ejecuta al iniciar
 
 
 //-------- [2] SEGUNDA SECCION 'Declaracion de terminales y no-terminales'
-terminal  IGUAL;
-terminal  MENOS;
-terminal  MAS;
-terminal  DIV;
-terminal  POR;
-terminal  LPAREN;
-terminal  RPAREN;
-terminal  FIN;
-terminal  SI;
-terminal  ENTONCES;
-terminal  LEER;
-terminal  MENOR; 
-terminal  MAYOR;
-terminal  PCOMA;
-terminal  TEXTO;
-terminal  ENTER;
+    terminal          MENOS;
+    terminal          MAS;
+    terminal          DIV;
+    terminal          POR;
+    terminal          LPAREN;
+    terminal          RPAREN;
+    terminal          FIN;
+    terminal          SI;
+    terminal          ENTONCES;
+    terminal          LEER;
+    terminal          MENOR; 
+    terminal          MAYOR;
+    terminal          PCOMA;
+    terminal          TEXTO;
+    terminal          ENTER;
+    terminal          ASIGN;
 
-terminal String   ID;
-terminal Integer  CONST;
-terminal Integer  INICIO;
-terminal Integer  ESCRIBIR;
+    terminal          IGUAL;
+    terminal          INICIO;
+    terminal  String  ID;
+    terminal  Integer CONST;
+    terminal          ESCRIBIR;
 
-non terminal      S,
-                  inst_1,
-                  inst_2,
-                  inst_leer,
-                  inst_escribir,
-                  inst_si,
-                  inst_asig
-                  ;
-non terminal  cond;
-non terminal Integer exp;
+non terminal          S;
+non terminal          inst;
+non terminal          inst_leer;
+non terminal          inst_escribir;
+non terminal          inst_si;
+non terminal          inst_asig;
+non terminal          cond;
+non terminal  Integer exp;
 
 //-------- [3] TERCERA SECCION 'Precedencia y asociatividad de terminales'
 
 precedence left MAS, MENOS; 
 precedence left POR, DIV;
-//precedence left IGUAL,ID;
-//precedence left LPAREN,RPAREN;
-//precedence left ID,LEER;
-//precedence left SI, ENTONCES;
 
-//-------- [4] CUARTA SECCION  'Gramatica'
+start with S;
 
-//S ::= INICIO S|TEXTO S |FIN ;
-/*
-color en ansi
-AnsiConsole.out.println(Ansi.ansi().bold().fg(Ansi.Color.RED).a("Hello").fg(Ansi.Color.GREEN).a(" World").fg(Ansi.Color.WHITE).a("!"));
-AnsiConsole.out.println(Ansi.ansi().reset());
-*/
-//TEST2
+S               ::= INICIO inst {::} FIN | INICIO {:System.exit(1);:} FIN;
 
-
-S               ::= INICIO inst_1 {:System.exit(1);:} FIN | INICIO {:System.exit(1);:} FIN;
-
-inst_1          ::= inst_escribir inst_1
-                  | inst_asig inst_1
-                  | inst_si inst_1
+inst          ::= inst_escribir inst
+                | inst_asig inst
+                | inst_si inst
+                |inst_leer inst
 ;
 
+inst_leer       ::= LEER LPAREN ID:var RPAREN 
+                    {:
+                        if(execute){
+                            java.util.Scanner s=new java.util.Scanner(System.in);
+                            String x=s.next();
+                            s.nextLine();
+                            Integer i=new Integer(Integer.parseInt(x));
+                            pushVar(var,i);
+                        }
+                    :}
+                    PCOMA;
+
 inst_escribir   ::= ESCRIBIR LPAREN TEXTO:t RPAREN
-                    {: System.out.println( Ansi.ansi().render("@|green \""+t+"\"|@") );:} 
+                    {: if(execute) System.out.println( Ansi.ansi().render("@|green \""+t+"\"|@") );:} 
                     PCOMA
                   | ESCRIBIR LPAREN exp:e RPAREN
-                    {: System.out.println( Ansi.ansi().render("@|green "+e+"|@") ); :}
+                    {: if(execute) System.out.println( Ansi.ansi().render("@|green "+e+"|@") ); :}
                     PCOMA                   
 ;
 
-inst_asig       ::= ID:var IGUAL exp:e
-{:
-  pushVar(var,e);
-:}
-PCOMA
+inst_asig       ::= ID:var ASIGN exp:e
+                    {: if(execute) pushVar(var,e);:} 
+                    PCOMA
 ;
 
-inst_si         ::= SI cond:c ENTONCES {:
-  System.out.println("------->"+c);
-  /*
-  if(c){
-    System.out.println("JOJOJO");
-  }
-  */
-:} inst_1 
-
+inst_si         ::= SI cond:c{:if(c==false) execute=false;:} ENTONCES inst{:execute=true;:}
+                    {:System.out.println("------->"+c);
+                     // if(c.booleanValue()==true){RESULT=1;System.out.println("A");}else{RESULT=null;System.out.println("A");}
+                    :} 
+                    
 ;
 
-cond            ::= exp:e1 MENOR exp:e2 {:RESULT=e1<e2;:}
-                  | exp:e1 MAYOR exp:e2 {:RESULT=e1>e2;:}
-                  | exp:e1 IGUAL exp:e2 {:RESULT=(e1==e2);:}
+cond            ::= exp:e1 MENOR exp:e2   {:RESULT=e1.intValue()<e2.intValue();:}
+                  | exp:e1 MAYOR exp:e2   {:RESULT=e1.intValue()>e2.intValue();:}
+                  | exp:e1 IGUAL exp:e2   {:RESULT=(e1.intValue()==e2.intValue());:}
 ;
 
-exp             ::=   exp:e1 MAS exp:e2  {:RESULT=(e1+e2);:}
-                    | exp:e1 POR exp:e2  {:RESULT=(e1*e2);:}
-                    | exp:e1 MENOS exp:e2 {:RESULT=(e1-e2);:}
-                    | exp:e1 DIV exp:e2 {:RESULT=(e1/e2);:}
-                    | ID:id {:RESULT=getValue(id);:}        
-                    | CONST:v{:RESULT=v;:}
+exp             ::=   exp:e1 MAS exp:e2   {:RESULT=(e1.intValue()+e2.intValue());:}
+                    | exp:e1 POR exp:e2   {:RESULT=(e1.intValue()*e2.intValue());:}
+                    | exp:e1 MENOS exp:e2 {:RESULT=(e1.intValue()-e2.intValue());:}
+                    | exp:e1 DIV exp:e2   {:RESULT=(e1.intValue()/e2.intValue());:}
+                    | ID:id               {:RESULT=getValue(id);:}        
+                    | CONST:v             {:RESULT=v;:}
 ;
-/* GRAMATICA FINAL
-S         ::=   INICIO inst_1 FIN ;
-inst_1    ::=   inst_2
-              | inst_1
-                {:System.out.println(ANSI_YELLOW+"inst_1"+ANSI_RESET);:}
-                inst_2
-                {:System.out.println(ANSI_CYAN+"inst_2"+ANSI_RESET);:}
-              ;
-inst_2    ::=   inst_leer                     
-              | inst_escribir       
-              | inst_si            
-              | inst_asig;
-inst_si   ::=   SI cond ENTONCES inst_2;
-inst_leer ::=   LEER LPAREN ID RPAREN{:new java.util.Scanner(System.in).nextLine();:};
-inst_escribir ::= ESCRIBIR LPAREN ID:i RPAREN {:System.out.println(i);:}
-			| ESCRIBIR LPAREN  TEXTO RPAREN
-      ;
-inst_asig ::=   ID:i IGUAL exp:e  {:System.out.println(i+"->"+e);:};
-
-exp       ::=   exp MAS exp                   
-              | exp POR exp           
-              | exp MENOS exp       
-              | exp DIV exp
-              | ID                          
-              | CONST;
-cond      ::=   exp MENOR exp | exp MAYOR exp | exp IGUAL exp;
-*/
