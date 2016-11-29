@@ -7,10 +7,12 @@ import  org.fusesource.jansi.*;
 
 parser code {:
     Hashtable <String,Integer> intVars;
+    GUI g;
     boolean execute=true;
     public void pushVar(String varName,int value){
       System.out.println(Ansi.ansi().render("@|cyan "+varName+"|@ = @|yellow "+value+"|@"));
         intVars.put(varName,value);
+        g.updateVarList(intVars);
     }
 
     public Integer getValue(String id){//obtiene el valor de una variable si es que existe
@@ -63,6 +65,7 @@ parser code {:
 :};
 
 init with {:
+    g=new GUI();
     AnsiConsole.systemInstall();
     intVars=new Hashtable<String,Integer>(); 
 :};//codigo que se ejecuta al iniciar
@@ -109,7 +112,7 @@ precedence left POR, DIV;
 
 start with S;
 
-S               ::= INICIO inst   ;
+S               ::=INICIO inst   ;
 
 inst          ::= inst_escribir inst 
                 | inst_asig inst
@@ -131,7 +134,7 @@ inst_leer       ::= LEER LPAREN ID:var RPAREN
                     PCOMA;
 
 inst_escribir   ::= ESCRIBIR LPAREN TEXTO:t RPAREN
-                    {: if(execute) System.out.println( Ansi.ansi().render("@|green \""+t+"\"|@") );:} 
+                    {: if(execute) System.out.println( Ansi.ansi().render("@|green +t+"|@") );:} 
                     PCOMA
                   | ESCRIBIR LPAREN exp:e RPAREN
                     {: if(execute) System.out.println( Ansi.ansi().render("@|green "+e+"|@") ); :}
