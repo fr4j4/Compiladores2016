@@ -116,7 +116,7 @@ inst          ::= inst_escribir inst
                 | inst_asig inst
                 | inst_si inst
                 | inst_leer inst
-                | 
+                
 ;
 
 inst_leer       ::= LEER LPAREN ID:var RPAREN 
