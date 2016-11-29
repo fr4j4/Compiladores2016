@@ -134,7 +134,7 @@ inst_leer       ::= LEER LPAREN ID:var RPAREN
                     PCOMA;
 
 inst_escribir   ::= ESCRIBIR LPAREN TEXTO:t RPAREN
-                    {: if(execute) System.out.println( Ansi.ansi().render("@|green +t+"|@") );:} 
+                    {: if(execute) System.out.println( Ansi.ansi().render("@|green"+t+"|@") );:} 
                     PCOMA
                   | ESCRIBIR LPAREN exp:e RPAREN
                     {: if(execute) System.out.println( Ansi.ansi().render("@|green "+e+"|@") ); :}
