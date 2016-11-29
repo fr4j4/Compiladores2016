@@ -62,7 +62,6 @@ parser code {:
     }
 :};
 
-
 init with {:
     AnsiConsole.systemInstall();
     intVars=new Hashtable<String,Integer>(); 
@@ -110,13 +109,12 @@ precedence left POR, DIV;
 
 start with S;
 
-S               ::= INICIO inst {::}  FIN | INICIO {:System.exit(1);:} FIN;
+S               ::= INICIO inst   ;
 
-inst          ::= inst_escribir inst
+inst          ::= inst_escribir inst 
                 | inst_asig inst
                 | inst_si inst
-                | inst_leer inst
-                
+                | inst_leer inst   |{:System.exit(0);:} FIN
 ;
 
 inst_leer       ::= LEER LPAREN ID:var RPAREN 
