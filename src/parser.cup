@@ -95,6 +95,7 @@ init with {:
 
 non terminal          S;
 non terminal          inst;
+non terminal          inst_aux;
 non terminal          inst_leer;
 non terminal          inst_escribir;
 non terminal          inst_si;
@@ -114,7 +115,7 @@ S               ::= INICIO inst {::} FIN | INICIO {:System.exit(1);:} FIN;
 inst          ::= inst_escribir inst
                 | inst_asig inst
                 | inst_si inst
-                |inst_leer inst
+                | inst_leer inst
 ;
 
 inst_leer       ::= LEER LPAREN ID:var RPAREN 
@@ -142,12 +143,16 @@ inst_asig       ::= ID:var ASIGN exp:e
                     PCOMA
 ;
 
-inst_si         ::= SI cond:c{:if(c==false) execute=false;:} ENTONCES inst{:execute=true;:}
-                    {:System.out.println("------->"+c);
+inst_si         ::= SI cond:c{:execute=true;if(c==false){execute=false;};:} ENTONCES inst_aux {:execute=true;:}
+                    {:
                      // if(c.booleanValue()==true){RESULT=1;System.out.println("A");}else{RESULT=null;System.out.println("A");}
                     :} 
                     
 ;
+
+inst_aux        ::=  inst_asig
+                    |inst_escribir
+                    |inst_leer;
 
 cond            ::= exp:e1 MENOR exp:e2   {:RESULT=e1.intValue()<e2.intValue();:}
                   | exp:e1 MAYOR exp:e2   {:RESULT=e1.intValue()>e2.intValue();:}
