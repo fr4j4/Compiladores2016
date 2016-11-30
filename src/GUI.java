@@ -10,7 +10,6 @@ public class GUI extends JFrame{
 	public GUI(){
 		super();
 		init();
-		this.setVisible(true);
 	}
 	private void init(){
 		this.setTitle("AZ2K16-GUI");
@@ -23,6 +22,12 @@ public class GUI extends JFrame{
 		JScrollPane jsp=new JScrollPane(codePad);
 		this.codePad.setFont(this.codePad.getFont().deriveFont(20f));
 		this.add(jsp,BorderLayout.CENTER);
+	}
+
+	public void mostrar_si(){
+		if(!this.isVisible()){
+			this.setVisible(true);
+		}
 	}
 
 	public void updateVarList(Hashtable ht){

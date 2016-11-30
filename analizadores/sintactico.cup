@@ -28,12 +28,14 @@ init with {:
     System.out.println(Ansi.ansi().render("- Para comenzar, debe escribir @|cyan inicio|@ ."));
     System.out.println(Ansi.ansi().render("- Para finalizar, debe escribir @|cyan fin|@ ."));
     System.out.println(Ansi.ansi().render("- Cada instruccion debe terminar con @|cyan ;|@ (excepto @|cyan inicio|@ y @|cyan fin|@)."));
+    System.out.println("- El uso de variables es \"case sensitive\" (a!=A)");
     System.out.println(Ansi.ansi().render("Instrucciones disponibles:"));
     System.out.println(Ansi.ansi().render("    @|cyan Asignacion  :|@ @|green variable = valor;|@"));
     System.out.println(Ansi.ansi().render("    @|cyan Escribir    :|@ @|green escribir(\"texto\");|@"));
     System.out.println(Ansi.ansi().render("                  @|green escribir(variable);|@"));
     System.out.println(Ansi.ansi().render("    @|cyan Lectura     :|@ @|green leer(variable);|@"));
     System.out.println(Ansi.ansi().render("    @|cyan Condicional :|@ @|green si condicion entonces instruccion;|@"));
+    System.out.println(Ansi.ansi().render("Para mostrar una tabla con las variables definidas escriba @|cyan vars|@."));
     System.out.println(Ansi.ansi().render("    "));
     System.out.println("Preparado para recibir instrucciones");
 :}
@@ -60,6 +62,7 @@ init with {:
     terminal  String  ID;
     terminal  Integer CONST;
     terminal          ESCRIBIR;
+    terminal          VENTANA;
 non terminal          S;
 non terminal          inst;
 non terminal          inst_aux;
@@ -85,7 +88,9 @@ S               ::=INICIO inst   ;
 inst            ::= inst_escribir inst 
                 | inst_asig inst
                 | inst_si inst
-                | inst_leer inst   |{:System.exit(0);:} FIN
+                | inst_leer inst   
+                | {:g.mostrar_si();:}VENTANA inst
+                |{:System.exit(0);:} FIN
 ;
 
 inst_leer       ::= LEER LPAREN ID:var RPAREN 

@@ -56,6 +56,7 @@ StringCharacter = [^\r\n\"\\]
   "fin"               {return symbol(sym.FIN);                          }
   "si"                {return symbol(sym.SI);                           }
   "entonces"          {return symbol(sym.ENTONCES);                     }
+  "vars"           {return symbol(sym.VENTANA);                     }
 	"<"				   	      {return symbol(sym.MENOR); 							          }
 	">"                	{return symbol(sym.MAYOR);   						          }
   {enter}             {return symbol(sym.ENTER);                        }
