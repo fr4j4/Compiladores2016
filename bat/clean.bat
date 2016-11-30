@@ -4,10 +4,11 @@
 cls
 echo "limpiando residuos"
 ::cd ..
-cd src
+cd ..\src
 del Lexer.jav*
 del parser.jav*
 del sym.jav*
+cd ..\build
 del *.class
-cd ..
+cd ..\bat
 echo "limpieza terminada"

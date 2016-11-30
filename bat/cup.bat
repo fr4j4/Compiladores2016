@@ -2,8 +2,8 @@
 ::Compiladores 2016 - fgonzlez,  ahidalgo, robulloa.
 ::-expect X significa que después de X advertencias no se generará nada y se lanzará error
 @echo off
-cls
-::cd ..
-cd src
-java  -Xmx128m -jar ../lib/java-cup-11b.jar -expect 5 -nowarn parser.cup
-cd ..
+cd ..\analizadores
+java  -Xmx128m -jar ../lib/java-cup-11b.jar -expect 5 -nowarn sintactico.cup
+move *java ..\src 
+del *.java*
+cd ..\bat
