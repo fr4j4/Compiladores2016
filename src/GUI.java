@@ -16,7 +16,7 @@ public class GUI extends JFrame{
 		this.setTitle("AZ2K16-GUI");
 		this.setResizable(false);
 		this.setSize(200,400);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		//this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLayout(new BorderLayout());
 		codePad=new JTextArea(0,0);
 		codePad.setEditable(false);
