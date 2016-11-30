@@ -3,6 +3,7 @@
 @echo off
 cls
 echo "limpiando residuos"
+::cd ..
 cd src
 del Lexer.jav*
 del parser.jav*
