@@ -10,5 +10,6 @@ del parser.jav*
 del sym.jav*
 cd ..\build
 del *.class
+del *.jar
 cd ..\bat
 echo "limpieza terminada"

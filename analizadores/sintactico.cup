@@ -34,6 +34,7 @@ init with {:
     System.out.println(Ansi.ansi().render("    @|cyan Escribir    :|@ @|green escribir(\"texto\");|@"));
     System.out.println(Ansi.ansi().render("                  @|green escribir(variable);|@"));
     System.out.println(Ansi.ansi().render("    @|cyan Lectura     :|@ @|green leer(variable);|@"));
+    System.out.println(Ansi.ansi().render("@|yellow                   Numero maximo de digitos permitidos es 10|@"));
     System.out.println(Ansi.ansi().render("    @|cyan Condicional :|@ @|green si condicion entonces instruccion;|@"));
     System.out.println(Ansi.ansi().render("Para mostrar una tabla con las variables definidas escriba @|cyan vars|@."));
     System.out.println(Ansi.ansi().render("    "));

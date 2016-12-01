@@ -10,10 +10,10 @@ import java.io.Reader;
 %column //usar un contador de columna que se este analizando (yycolumn)
 %cup // integrar CUP
 %ignorecase //no diferenciar de mayusculas y minusculas
-//codigo se uduario
+//codigo de usuario
 
 %{   
-     StringBuffer string = new StringBuffer();
+     StringBuffer string = new StringBuffer();//"string" vacío
 
     private Symbol symbol(int type) {
         return new Symbol(type, yyline, yycolumn);
